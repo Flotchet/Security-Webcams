@@ -12,7 +12,7 @@ It can save the frames where a face is detected and it can also save all the fra
 
 ## Requierements
 
-Coded on Python 3.11
+Coded with Python 3.11
 
 Python libraries:
 
