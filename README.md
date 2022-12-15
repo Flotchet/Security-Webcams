@@ -2,7 +2,7 @@
 
 *The project is currently in devlopping state*
 
-current version: 0.1.1 
+current version: 0.1.1
 
 ## What it does
 
@@ -12,7 +12,7 @@ It can save the frames where a face is detected and it can also save all the fra
 
 ## Requierements
 
-Coded on Python 3.11
+Coded with Python 3.11
 
 Python libraries:
 
@@ -49,9 +49,7 @@ Run the python file in your terminal and it should do the trick
 * Asynchronous frame display - frame saving
 * Optimization (maybe switching to Cython?)
 
-
 ## Init.ini
-
 
 face_detection
 
@@ -63,7 +61,7 @@ Display
 * True = display what webcams are seeing on your display
 * False = don't show what webcams are seeing
 
-wait_interval 
+wait_interval
 
 * time between two frames in seconds
 

@@ -15,14 +15,14 @@ import sys
 
 #General purpose class 
 ######################################################################################################################################
-###################################################################################################################### CLASS directory
+###################################################################################################################### CLASS Directory
 ######################################################################### S  METHOD __init__                          self,str -> None
 ######################################################################### _  METHOD create_directory                  self     -> None
 ######################################################################### s  METHOD have_the_number_of_files_changed  self     -> bool
 ######################################################################### _  METHOD get_number_of_files               self     -> int
 ######################################################################### S  METHOD update_the_number_of_files        self     -> None
 
-class directory:
+class Directory:
 
     """Folder class that can create a folder and gives information about it's state"""
     # This class creates a directory and gives information about it's state
@@ -223,7 +223,7 @@ def global_alarm(location : str, sound_location : str, ring_time = 30, waiting_b
         """Detects if directory change in number of file and if it is the case make alarm ring"""
         # This function detects if directory change in number of file and if it is the case make alarm ring
 
-        folder = directory(location)
+        folder = Directory(location)
 
         while True:
 
