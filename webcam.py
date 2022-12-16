@@ -4,7 +4,7 @@
 #3. add the possibility to have different configuration for each webcam
 
 # import cython
-# import numba
+# import numba 
 import fnmatch
 import time
 import datetime
