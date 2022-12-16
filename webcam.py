@@ -3,7 +3,8 @@
 #2. add try and except
 #3. add the possibility to have different configuration for each webcam
 
-
+# import cython
+# omport numba
 import fnmatch
 import time
 import datetime
@@ -14,17 +15,18 @@ import playsound
 import sys
 
 #General purpose class 
-######################################################################################################################################
-###################################################################################################################### CLASS Directory
-######################################################################### S  METHOD __init__                          self,str -> None
-######################################################################### _  METHOD create_directory                  self     -> None
-######################################################################### s  METHOD have_the_number_of_files_changed  self     -> bool
-######################################################################### _  METHOD get_number_of_files               self     -> int
-######################################################################### S  METHOD update_the_number_of_files        self     -> None
+###############################################################################
+############################################################### CLASS Directory
+################## S  METHOD __init__                          self,str -> None
+################## _  METHOD create_directory                  self     -> None
+################## s  METHOD have_the_number_of_files_changed  self     -> bool
+################## _  METHOD get_number_of_files               self     -> int
+################## S  METHOD update_the_number_of_files        self     -> None
 
 class Directory:
 
-    """Folder class that can create a folder and gives information about it's state"""
+    """Folder class that can create a folder 
+    and gives information about it's state"""
     # This class creates a directory and gives information about it's state
 
     def __init__(self, location : str) -> None :
@@ -48,8 +50,11 @@ class Directory:
 
         """Checks if the number of files in the directory has changed"""
 
-        if self.number_of_files != len(fnmatch.filter(os.listdir(self.location), '*.*')):
-            self.number_of_files = len(fnmatch.filter(os.listdir(self.location), '*.*'))
+        if self.number_of_files != len(fnmatch.filter(
+                                       os.listdir(self.location), '*.*')):
+
+            self.number_of_files = len(fnmatch.filter(
+                                       os.listdir(self.location), '*.*'))
             return True
 
         else:
@@ -66,20 +71,23 @@ class Directory:
                 
         """Updates the number of files in the directory"""
     
-        self.number_of_files = len(fnmatch.filter(os.listdir(self.location), '*.*'))
+        self.number_of_files = len(fnmatch.filter(
+                                   os.listdir(self.location), '*.*'))
 
         return None
 
-######################################################################################################################################
-######################################################################################################################################
+###############################################################################
+###############################################################################
 
 
 
 #General purpose functions 
-######################################################################################################################################
-############################################################################################### PROCEDURE save_frame_as_jpeg_in_folder
+###############################################################################
+######################################## PROCEDURE save_frame_as_jpeg_in_folder
 
-def save_frame_as_jpeg_in_folder(frame : any, location : str, camera_id : int) -> None :
+def save_frame_as_jpeg_in_folder(frame : any, 
+                                 location : str, 
+                                 camera_id : int) -> None :
 
     """Saves a frame as a jpeg image in a folder"""
     # This function saves a frame as a jpeg image in a folder
@@ -93,21 +101,24 @@ def save_frame_as_jpeg_in_folder(frame : any, location : str, camera_id : int) -
 
     return None
 
-########################################################################################################## T FUNCTION cameras_detector
+################################################### T FUNCTION cameras_detector
 
 def cameras_detector() -> list[int] :
 
     """Detects the number of cameras connected to the computer and their ids"""
-    # This is a generator that yields the number of cameras connected to the computer and returns their ids
+    # This is a generator that yields the number of cameras connected to the 
+    # computer and returns their ids
 
     devices = os.listdir("/dev")
     cameras_indices = [int(device[-1]) for device in devices 
-                      if (device.startswith("video") and not(int(device[-1]) % 2))]
+                      if (device.startswith("video") 
+                          and not(int(device[-1]) % 2))]
+
     cameras_indices.sort()
 
     return cameras_indices
 
-################################################################################################################# PROCEDURE play_sound
+########################################################## PROCEDURE play_sound
 
 def play_sound(sound_file : str) -> None :
 
@@ -118,20 +129,21 @@ def play_sound(sound_file : str) -> None :
 
     return None
 
-################################################################################################### T FUNCTION face_detection_in_frame
+############################################ T FUNCTION face_detection_in_frame
 
 def face_detection_in_frame(frame : any) -> any:
 
     """Detects faces in a frame"""
     # This function detects faces in a frame
 
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 
+                                         "haarcascade_frontalface_default.xml")
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
     return faces
 
-###################################################################################################### T Function ini_reader(location)
+############################################### T Function ini_reader(location)
 
 def ini_reader(location : str) -> dict():
 
@@ -148,14 +160,14 @@ def ini_reader(location : str) -> dict():
     return dict(lines)
 
 
-######################################################################################################################################
-######################################################################################################################################
+###############################################################################
+###############################################################################
 
 
 
 #specific functions 
-######################################################################################################################################
-############################################################################################################## PROCEDURE global_camera
+###############################################################################
+####################################################### PROCEDURE global_camera
 
 def global_camera(id : int, 
                   face_detection = True, 
@@ -166,8 +178,10 @@ def global_camera(id : int,
                   location_frames = "frames",
                   location_face = "faces_detected") -> None:
 
-    """Detects faces in a camera and displays the camera and store the current frame in a folder as a jpeg if a face is detected"""
-    # This function detects faces in a camera and displays the camera and store the frame in a folder as a jpeg if a face is detected
+    """Detects faces in a camera and displays the camera and store the current 
+    frame in a folder as a jpeg if a face is detected"""
+    # This function detects faces in a camera and displays the camera and 
+    # store the frame in a folder as a jpeg if a face is detected
 
     camera = cv2.VideoCapture(id)
 
@@ -202,7 +216,7 @@ def global_camera(id : int,
 
     return None
 
-######################################################################################################## PROCEDURE global_alarm_ringer
+################################################# PROCEDURE global_alarm_ringer
 
 def global_alarm_ringer(sound_location : str, ring_time = 30) -> None :
 
@@ -216,12 +230,17 @@ def global_alarm_ringer(sound_location : str, ring_time = 30) -> None :
     
         return None
 
-############################################################################################################### PROCEDURE global_alarm
+######################################################## PROCEDURE global_alarm
 
-def global_alarm(location : str, sound_location : str, ring_time = 30, waiting_between_checks = 10) -> None:
+def global_alarm(location : str, 
+                 sound_location : str, 
+                 ring_time = 30, 
+                 waiting_between_checks = 10) -> None:
 
-        """Detects if directory change in number of file and if it is the case make alarm ring"""
-        # This function detects if directory change in number of file and if it is the case make alarm ring
+        """Detects if directory change in number of 
+        file and if it is the case make alarm ring"""
+        # This function detects if directory change in number of file 
+        # and if it is the case make alarm ring
 
         folder = Directory(location)
 
@@ -234,14 +253,14 @@ def global_alarm(location : str, sound_location : str, ring_time = 30, waiting_b
 
         return None
 
-######################################################################################################################################
-######################################################################################################################################
+###############################################################################
+###############################################################################
 
 
 
 #main function & global_launcher function
-######################################################################################################################################
-################################################################################################################################# MAIN
+###############################################################################
+########################################################################## MAIN
 
 def main() -> None:
     
@@ -406,8 +425,8 @@ def main() -> None:
     
         return None
 
-######################################################################################################################################
-############################################################################################################### GLOBAL_SECURITY_SYSTEM
+###############################################################################
+######################################################## GLOBAL_SECURITY_SYSTEM
 
 
 def global_security_system(cameras_indices = cameras_detector(), 
@@ -436,14 +455,15 @@ def global_security_system(cameras_indices = cameras_detector(),
                                                Save_frame_with_face, 
                                                location_frames, 
                                                location_face)) 
-                                                                    for id in cameras_indices]
+                for id in cameras_indices]
 
     if Alarm:
         processes.append(multiprocessing.Process(target=global_alarm,
                                                   args=(location_frames,
                                                         location_sound,
                                                         ring_time,
-                                                        waiting_between_checks)))
+                                                        waiting_between_checks)
+                                                        ))
 
 
     for process in processes:
@@ -455,13 +475,13 @@ def global_security_system(cameras_indices = cameras_detector(),
     return None
 
 
-######################################################################################################################################
-######################################################################################################################################
+###############################################################################
+###############################################################################
 
 
 
 #OLD function that are not used nor maintained anymore
-########################################################################## PROCEDURE display_camera
+###################################################### PROCEDURE display_camera
 
 def display_camera(id : int) -> None:
 
@@ -482,14 +502,15 @@ def display_camera(id : int) -> None:
     
     return None
 
-######################################################################### PROCEDURE display_cameras
+##################################################### PROCEDURE display_cameras
 
 def display_cameras(cameras_indices = cameras_detector()) -> None :
 
     """Displays a series of cameras by their ids"""
     # This function displays a series of cameras by their ids
 
-    cameras = [multiprocessing.Process(target=display_camera, args=(id,)) for id in cameras_indices]
+    cameras = [multiprocessing.Process(target=display_camera, args=(id,)) 
+              for id in cameras_indices]
 
     for camera in cameras:
         camera.start()
@@ -499,7 +520,7 @@ def display_cameras(cameras_indices = cameras_detector()) -> None :
 
     return None
 
-###################################################### PROCEDURE display_camera_with_face_detection
+################################## PROCEDURE display_camera_with_face_detection
 
 def display_camera_with_face_detection(id : int) -> None :
 
@@ -525,14 +546,17 @@ def display_camera_with_face_detection(id : int) -> None :
 
     return None
 
-##################################################### PROCEDURE display_cameras_with_face_detection
+################################# PROCEDURE display_cameras_with_face_detection
 
 def display_cameras_with_face_detection(cameras_indices = cameras_detector()):
 
     """Displays a series of cameras by their ids and detects faces"""
     # This function displays a series of cameras by their ids and detects faces
 
-    cameras = [multiprocessing.Process(target=display_camera_with_face_detection, args=(id,)) for id in cameras_indices]
+    cameras = [multiprocessing.Process(
+                  target=display_camera_with_face_detection,
+                  args=(id,)) 
+                      for id in cameras_indices]
 
     for camera in cameras:
         camera.start()
@@ -542,12 +566,15 @@ def display_cameras_with_face_detection(cameras_indices = cameras_detector()):
 
     return None
 
-############################################################ PROCEDURE save_frame_as_jpeg_in_folder
+######################################## PROCEDURE save_frame_as_jpeg_in_folder
 
-def security_camera_face_detection(id,wait_interval = 0, location = "faces_detected") -> None:
+def security_camera_face_detection(id : int,
+                                   wait_interval = 0, 
+                                   location = "faces_detected") -> None:
 
     """Detects faces in a camera"""
-    # This function detects faces in a camera and store the current frame in a folder as a jpeg if a face is detected
+    # This function detects faces in a camera and store the current frame
+    # in a folder as a jpeg if a face is detected
 
     camera = cv2.VideoCapture(id)
 
@@ -568,14 +595,19 @@ def security_camera_face_detection(id,wait_interval = 0, location = "faces_detec
 
     return None
 
-########################################################### PROCEDURE save_frames_as_jpeg_in_folder
+####################################### PROCEDURE save_frames_as_jpeg_in_folder
 
-def security_cameras_face_detection(cameras_indices = cameras_detector(), wait_interval = 0, location = "faces_detected") -> None:
+def security_cameras_face_detection(cameras_indices = cameras_detector(), 
+                                    wait_interval = 0, 
+                                    location = "faces_detected") -> None:
 
     """Detects faces in a series of cameras by their ids"""
-    # This function detects faces in a series of cameras by their ids and store the frame in a folder as a jpeg if a face is detected
+    # This function detects faces in a series of cameras by their ids and
+    # store the frame in a folder as a jpeg if a face is detected
 
-    cameras = [multiprocessing.Process(target=security_camera_face_detection, args=(id,wait_interval)) for id in cameras_indices]
+    cameras = [multiprocessing.Process(target=security_camera_face_detection, 
+                                       args=(id,wait_interval,location)) 
+              for id in cameras_indices]
 
     for camera in cameras:
         camera.start()
@@ -585,12 +617,16 @@ def security_cameras_face_detection(cameras_indices = cameras_detector(), wait_i
 
     return None
 
-############################################## PROCEDURE security_camera_face_detection_and_display
+########################## PROCEDURE security_camera_face_detection_and_display
 
-def security_camera_face_detection_and_display(id,wait_interval = 0, location = "faces_detected"):
+def security_camera_face_detection_and_display(id : int,
+                                               wait_interval = 0, 
+                                               location = "faces_detected"):
 
-    """Detects faces in a camera and displays the camera and store the current frame in a folder as a jpeg if a face is detected"""
-    # This function detects faces in a camera and displays the camera and store the current frame in a folder as a jpeg if a face is detected
+    """Detects faces in a camera and displays the camera and store 
+    the current frame in a folder as a jpeg if a face is detected"""
+    # This function detects faces in a camera and displays the camera and
+    #  store the current frame in a folder as a jpeg if a face is detected
 
     camera = cv2.VideoCapture(id)
 
@@ -616,14 +652,25 @@ def security_camera_face_detection_and_display(id,wait_interval = 0, location = 
 
     return None
 
-############################################# PROCEDURE security_cameras_face_detection_and_display
+######################### PROCEDURE security_cameras_face_detection_and_display
 
-def security_cameras_face_detection_and_display(cameras_indices = cameras_detector(), wait_interval = 0, location = "faces_detected") -> None :
+def security_cameras_face_detection_and_display(cameras_indices 
+                                                    = cameras_detector(), 
+                                                wait_interval = 0, 
+                                                location = "faces_detected"
+                                                    ) -> None :
 
-    """Detects faces in a series of cameras by their ids and displays the cameras and store the frame in a folder as a jpeg if a face is detected"""
-    # This function detects faces in a series of cameras by their ids and displays the cameras and store the frame in a folder as a jpeg if a face is detected
+    """Detects faces in a series of cameras by their ids and displays the 
+    cameras and store the frame in a folder as a jpeg if a face is detected"""
+    # This function detects faces in a series of cameras by their ids and
+    # displays the cameras and store the frame in a folder as a jpeg if a
+    # face is detected
 
-    cameras = [multiprocessing.Process(target=security_camera_face_detection_and_display, args=(id,wait_interval,location)) for id in cameras_indices]
+
+    cameras = [multiprocessing.Process(
+                            target=security_camera_face_detection_and_display,
+                            args=(id,wait_interval,location))
+              for id in cameras_indices]
 
     for camera in cameras:
         camera.start()
@@ -633,7 +680,7 @@ def security_cameras_face_detection_and_display(cameras_indices = cameras_detect
 
     return None
 
-##################################################################### PROCEDURE security_ring_alarm
+################################################# PROCEDURE security_ring_alarm
 
 def security_ring_alarm(file_location : str) -> None :
 
@@ -644,7 +691,7 @@ def security_ring_alarm(file_location : str) -> None :
 
     return None
 
-########################################################################## PROCEDURE global_cameras
+###################################################### PROCEDURE global_cameras
 
 def global_cameras(cameras_indices = cameras_detector(), 
                   face_detection = True, 
@@ -655,8 +702,10 @@ def global_cameras(cameras_indices = cameras_detector(),
                   location = "frames",
                   location_face = "faces_detected") -> None :
 
-    """Detects faces in a series of cameras and displays the cameras and store the current frame in a folder as a jpeg"""
-    # This function detects faces in a series of cameras and displays the cameras and store the frame in a folder as a jpeg
+    """Detects faces in a series of cameras and displays the 
+    cameras and store the current frame in a folder as a jpeg"""
+    # This function detects faces in a series of cameras and displays the
+    # cameras and store the frame in a folder as a jpeg
 
     cameras = [multiprocessing.Process(target=global_camera, 
                                        args=(id, 
@@ -677,22 +726,25 @@ def global_cameras(cameras_indices = cameras_detector(),
 
     return None
 
-###################################################################################################
+###############################################################################
 
 
 
 
-###################################################################################################################################### START OF
-###################################################################################################################################### PROGRAM
+###################################################################### START OF
+###################################################################### PROGRAM
 
 
 if __name__ == "__main__":
     try:
         main()
+    except Exception:
+        print(f"An error occured {Exception}")
+        sys.exit(1)
     except KeyboardInterrupt:
         print("Program interrupted by user")
         sys.exit(0)
 
 
-###################################################################################################################################### END OF
-###################################################################################################################################### PROGRAM
+###################################################################### END OF
+###################################################################### PROGRAM
