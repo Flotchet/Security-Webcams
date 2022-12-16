@@ -2,7 +2,7 @@
 
 *The project is currently in devlopping state*
 
-current version: 0.1.2
+current version: 0.1.3
 
 ## What it does
 
